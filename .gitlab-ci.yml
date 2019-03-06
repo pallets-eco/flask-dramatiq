@@ -1,0 +1,15 @@
+stages:
+- test
+
+
+tests:
+  stage: test
+  image: circleci/python:3.7-stretch
+  variables:
+    XDG_CACHE_HOME: .cache/
+  script:
+  - poetry install
+  - poetry run flake8 example.py flask_dramatiq.py tests/func/
+  - poetry run pytest -x tests/func/
+  cache:
+    paths: [.cache/]
