@@ -18,6 +18,8 @@ flask-sqlalchemy = "^2.3"
 dramatiq = {version = "^1.5",extras = ["rabbitmq"]}
 psycopg2 = "^2.7"
 flask-migrate = "^2.4"
+pytest = "^4.3"
+requests = "^2.21"
 
 [tool.poetry.plugins."flask.commands"]
 worker = "flask_dramatiq:worker"
