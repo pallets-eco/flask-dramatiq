@@ -1,0 +1,22 @@
+stages:
+- test
+
+
+tests:
+  stage: test
+  image: circleci/python:3.7-stretch
+  services:
+  - postgres:11-alpine
+  - rabbitmq:3-alpine
+  variables:
+    BROKER_URL: amqp://rabbitmq
+    PGHOST: postgres
+    PGUSER: postgres
+    XDG_CACHE_HOME: .cache/
+  script:
+  - poetry install
+  - poetry run flake8 example.py flask_dramatiq.py tests/func/
+  - poetry run ./example.py db upgrade
+  - poetry run pytest -x tests/func/
+  cache:
+    paths: [.cache/]
