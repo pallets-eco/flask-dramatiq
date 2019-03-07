@@ -10,7 +10,6 @@ homepage = "https://pypi.org/project/flask-dramatiq"
 [tool.poetry.dependencies]
 python = "^3.6"
 dramatiq = "^1.5"
-flask-migrate = "^2.4"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
