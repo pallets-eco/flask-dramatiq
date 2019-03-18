@@ -52,9 +52,15 @@ class AppContextMiddleware(Middleware):
 class Dramatiq:
     # The Flask extension.
 
-    def __init__(self, app=None, name='dramatiq', config_prefix=None):
+    # Reuse same defaults as dramatiq. cf.
+    # https://github.com/Bogdanp/dramatiq/blob/master/dramatiq/broker.py#L34-L44
+    DEFAULT_BROKER = 'dramatiq.brokers.rabbitmq:RabbitmqBroker'
+
+    def __init__(self, app=None, broker_cls=DEFAULT_BROKER, name='dramatiq',
+                 config_prefix=None):
         self.actors = []
         self.app = app
+        self.broker_cls = broker_cls
         self.config_prefix = config_prefix or name.upper() + '_BROKER'
         self.name = name
         if app:
@@ -62,11 +68,10 @@ class Dramatiq:
 
     def init_app(self, app):
         app.extensions[self.name] = self
-        # Reuse same defaults as dramatiq. cf.
-        # https://github.com/Bogdanp/dramatiq/blob/master/dramatiq/broker.py#L34-L44
-        app.config.setdefault(
-            self.config_prefix, 'dramatiq.brokers.rabbitmq:RabbitmqBroker')
-        cls = import_object(app.config[self.config_prefix])
+        app.config.setdefault(self.config_prefix, self.broker_cls)
+        cls = app.config[self.config_prefix]
+        if isinstance(cls, str):
+            cls = import_object(cls)
         broker = cls(url=app.config.get(self.config_prefix + '_URL'))
         broker.add_middleware(AppContextMiddleware(app))
         set_broker(broker)
