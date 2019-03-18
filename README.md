@@ -9,6 +9,7 @@ Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) in your
 - Ensure Flask app is available to Dramatiq actor.
 - Add `worker` command to Flask CLI.
 - Enable [Flask Application factory](http://flask.pocoo.org/docs/dev/tutorial/factory/).
+- Multiple broker with configurable prefix.
 
 
 ## Installation and Usage
