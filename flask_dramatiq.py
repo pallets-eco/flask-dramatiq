@@ -52,14 +52,16 @@ class AppContextMiddleware(Middleware):
 class Dramatiq:
     # The Flask extension.
 
-    def __init__(self, app=None, config_prefix='DRAMATIQ_BROKER'):
+    def __init__(self, app=None, name='dramatiq', config_prefix=None):
         self.actors = []
         self.app = app
-        self.config_prefix = config_prefix
+        self.config_prefix = config_prefix or name.upper() + '_BROKER'
+        self.name = name
         if app:
             self.init_app(app)
 
     def init_app(self, app):
+        app.extensions[self.name] = self
         # Reuse same defaults as dramatiq. cf.
         # https://github.com/Bogdanp/dramatiq/blob/master/dramatiq/broker.py#L34-L44
         app.config.setdefault(
