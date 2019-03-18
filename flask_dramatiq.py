@@ -100,6 +100,11 @@ class LazyActor(object):
         self.kw = kw
         self.actor = None
 
+    def __getattr__(self, name):
+        if not self.actor:
+            raise AttributeError(name)
+        return getattr(self.actor, name)
+
     def register(self):
         self.actor = register_actor(**self.kw)(self.fn)
 
