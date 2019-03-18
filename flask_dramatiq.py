@@ -1,5 +1,6 @@
 from importlib import import_module
 from threading import local
+from warnings import warn
 
 import click
 from dramatiq import (
@@ -52,19 +53,33 @@ class AppContextMiddleware(Middleware):
 class Dramatiq:
     # The Flask extension.
 
-    def __init__(self, app=None, config_prefix='DRAMATIQ_BROKER'):
+    # Reuse same defaults as dramatiq. cf.
+    # https://github.com/Bogdanp/dramatiq/blob/master/dramatiq/broker.py#L34-L44
+    DEFAULT_BROKER = 'dramatiq.brokers.rabbitmq:RabbitmqBroker'
+
+    def __init__(self, app=None, broker_cls=DEFAULT_BROKER, name='dramatiq',
+                 config_prefix=None):
         self.actors = []
         self.app = app
-        self.config_prefix = config_prefix
+        self.broker_cls = broker_cls
+        self.config_prefix = config_prefix or name.upper() + '_BROKER'
+        self.name = name
         if app:
             self.init_app(app)
 
     def init_app(self, app):
-        # Reuse same defaults as dramatiq. cf.
-        # https://github.com/Bogdanp/dramatiq/blob/master/dramatiq/broker.py#L34-L44
-        app.config.setdefault(
-            self.config_prefix, 'dramatiq.brokers.rabbitmq:RabbitmqBroker')
-        cls = import_object(app.config[self.config_prefix])
+        if self.app is not None:
+            warn(
+                "%s is used by more than one flask application. "
+                "Actor's context may be set incorrectly." % (self,),
+                stacklevel=2,
+            )
+        self.app = app
+        app.extensions[self.name] = self
+        app.config.setdefault(self.config_prefix, self.broker_cls)
+        cls = app.config[self.config_prefix]
+        if isinstance(cls, str):
+            cls = import_object(cls)
         broker = cls(url=app.config.get(self.config_prefix + '_URL'))
         broker.add_middleware(AppContextMiddleware(app))
         set_broker(broker)
@@ -97,6 +112,11 @@ class LazyActor(object):
         self.fn = fn
         self.kw = kw
         self.actor = None
+
+    def __getattr__(self, name):
+        if not self.actor:
+            raise AttributeError(name)
+        return getattr(self.actor, name)
 
     def register(self):
         self.actor = register_actor(**self.kw)(self.fn)
