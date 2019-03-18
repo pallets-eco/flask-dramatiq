@@ -77,6 +77,18 @@ $ flask worker bluebroker
 ```
 
 
+## Using Dramatiq CLI
+
+You can still use `dramatiq` CLI by declaring a file containing:
+
+``` python
+app = create_app()
+broker = dramatiq.broker
+```
+
+Now call `dramatiq` CLI with `some_module:broker` as usual.
+
+
 ## Credit and Support
 
 Feel free to open an issue or suggest a merge request on [Gitlab project
