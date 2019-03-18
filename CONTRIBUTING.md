@@ -38,4 +38,4 @@ $ git push git@gitlab.com:bersace/flask-dramatiq.git
 ```
 
 You require access to [Flask-Dramatiq on
-PyPI](https://pypi.org/project/flask-dramatiq/).
+PyPI](https://pypi.org/project/flask-dramatiq/). Remember to update Changelog.
