@@ -141,7 +141,7 @@ def create_app():
 
     db.init_app(app)
     Migrate(app, db)
-    # Import tasks before initializing app for extension.
+
     dramatiq.init_app(app)
     otherbroker.init_app(app)
 
