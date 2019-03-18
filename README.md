@@ -1,9 +1,9 @@
-# // Flask-Dramatiq //
+![Flask-Dramatiq](https://gitlab.com/bersace/flask-dramatiq/raw/master/docs/logo-horizontal.png?inline=false)
 
-Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) in your
-[Flask](https://flask.pocoo.org) application.
+Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) task queue in your
+[Flask](https://flask.pocoo.org) web application.
 
-## Features
+## // Features // 
 
 - Configure Dramatiq from Flask configuration.
 - Ensure Flask app is available to Dramatiq actor.
@@ -12,7 +12,7 @@ Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) in your
 - Handle multiple brokers with configurable prefix.
 
 
-## Installation and Usage
+## // Installation and Usage //
 
 Flask-Dramatiq is licensed under BSD-3-Clause. Add `flask-dramatiq` to your
 project:
@@ -56,7 +56,7 @@ A complete flask app is available in project source tree
 [example.py](https://gitlab.com/bersace/flask-dramatiq/blob/master/example.py).
 
 
-## Multiple brokers
+## // Multiple brokers //
 
 You may need multiple broker, e.g. by associating a broker with a blueprint.
 Flask-Dramatiq supports this. Give other broker a name and run a dedicated
@@ -77,7 +77,7 @@ $ flask worker bluebroker
 ```
 
 
-## Using Dramatiq CLI
+## // Using Dramatiq CLI //
 
 You can still use `dramatiq` CLI by declaring a file containing:
 
@@ -89,7 +89,7 @@ broker = dramatiq.broker
 Now call `dramatiq` CLI with `some_module:broker` as usual.
 
 
-## Credit and Support
+## // Credit and Support //
 
 Feel free to open an issue or suggest a merge request on [Gitlab project
 page](https://gitlab.com/bersace/flask-dramatiq). Contribution welcome!
