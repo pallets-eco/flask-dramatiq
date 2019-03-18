@@ -137,7 +137,7 @@ class LazyActor(object):
 @click.option('-t', '--threads', default=8,
               metavar='THREADS', show_default=True,
               help="the number of worker treads per processes")
-@click.option('-q', '--queues', type=str, default=None,
+@click.option('-Q', '--queues', type=str, default=None,
               metavar='QUEUES', show_default=True,
               help="listen to a subset of queues, comma separated")
 @with_appcontext
