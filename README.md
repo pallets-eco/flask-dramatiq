@@ -9,7 +9,7 @@ Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) in your
 - Ensure Flask app is available to Dramatiq actor.
 - Add `worker` command to Flask CLI.
 - Enable [Flask Application factory](http://flask.pocoo.org/docs/dev/tutorial/factory/).
-- Multiple broker with configurable prefix.
+- Handle multiple brokers with configurable prefix.
 
 
 ## Installation and Usage
@@ -54,6 +54,27 @@ $ flask worker --processes=1
 
 A complete flask app is available in project source tree
 [example.py](https://gitlab.com/bersace/flask-dramatiq/blob/master/example.py).
+
+
+## Multiple brokers
+
+You may need multiple broker, e.g. by associating a broker with a blueprint.
+Flask-Dramatiq supports this. Give other broker a name and run a dedicated
+worker for it.
+
+``` python
+bluebroker = Dramatiq(name='bluebroker')
+
+# Configuration:
+
+BLUEBROKER_BROKER_URL = 'rabbitmq://…'
+```
+
+Now run it :
+
+``` console
+$ flask worker bluebroker
+```
 
 
 ## Credit and Support

@@ -41,7 +41,7 @@ from warnings import filterwarnings
 filterwarnings("ignore", message="The psycopg2 wheel package will be renamed")  # noqa
 
 import click
-from flask import Blueprint, Flask, jsonify
+from flask import Blueprint, Flask, jsonify, request
 from flask.cli import FlaskGroup
 from flask_dramatiq import Dramatiq
 from flask_migrate import Migrate
@@ -52,6 +52,7 @@ db = SQLAlchemy()
 dramatiq = Dramatiq()
 logger = logging.getLogger(__name__)
 example = Blueprint('example', 'example')
+otherbroker = Dramatiq(name='other')
 
 
 class Job(db.Model):
@@ -85,6 +86,11 @@ class Job(db.Model):
         )
 
 
+@otherbroker.actor(queue_name='otherq')
+def other_job(job_id):
+    process_job(job_id)
+
+
 @dramatiq.actor
 def process_job(job_id):
     job = Job.query.get(job_id)
@@ -111,7 +117,11 @@ def job_post(type_):
     db.session.add(job)
     db.session.commit()
 
-    process_job.send(job.id)
+    broker = request.args.get('broker', 'default')
+    if 'other' == broker:
+        other_job.send(job.id)
+    else:
+        process_job.send(job.id)
 
     return jsonify(job.asdict())
 
@@ -133,6 +143,7 @@ def create_app():
     Migrate(app, db)
     # Import tasks before initializing app for extension.
     dramatiq.init_app(app)
+    otherbroker.init_app(app)
 
     app.register_blueprint(example)
 
@@ -149,6 +160,7 @@ if '__main__' == __name__:
         level=logging.INFO,
         format='%(levelname)1.1s: %(message)s',
     )
+    logger.setLevel(logging.DEBUG)
 
     try:
         exit(main())
