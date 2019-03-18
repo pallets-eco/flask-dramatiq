@@ -1,7 +1,7 @@
 ![Flask-Dramatiq](https://gitlab.com/bersace/flask-dramatiq/raw/master/docs/logo-horizontal.png?inline=false)
 
-Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) in your
-[Flask](https://flask.pocoo.org) application.
+Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) task queue in your
+[Flask](https://flask.pocoo.org) web application.
 
 ## // Features // 
 
