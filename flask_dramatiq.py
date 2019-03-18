@@ -13,6 +13,7 @@ from dramatiq.cli import (
     main as dramatiq_worker,
     make_argument_parser as dramatiq_argument_parser,
 )
+from flask import current_app
 from flask.cli import with_appcontext
 
 
@@ -67,6 +68,9 @@ class Dramatiq:
         if app:
             self.init_app(app)
 
+    def __repr__(self):
+        return '<%s %s>' % (self.__class__.__name__, self.name)
+
     def init_app(self, app):
         if self.app is not None:
             warn(
@@ -75,17 +79,16 @@ class Dramatiq:
                 stacklevel=2,
             )
         self.app = app
-        app.extensions[self.name] = self
+        app.extensions['dramatiq-' + self.name] = self
         app.config.setdefault(self.config_prefix, self.broker_cls)
         cls = app.config[self.config_prefix]
         if isinstance(cls, str):
             cls = import_object(cls)
-        broker = cls(url=app.config.get(self.config_prefix + '_URL'))
-        broker.add_middleware(AppContextMiddleware(app))
-        set_broker(broker)
+        self.broker = cls(url=app.config.get(self.config_prefix + '_URL'))
+        self.broker.add_middleware(AppContextMiddleware(app))
 
         for actor in self.actors:
-            actor.register()
+            actor.register(broker=self.broker)
 
     def actor(self, fn=None, **kw):
         # Substitude dramatiq.actor decorator to return a lazy wrapper. This
@@ -113,13 +116,16 @@ class LazyActor(object):
         self.kw = kw
         self.actor = None
 
+    def __call__(self, *a, **kw):
+        return self.fn(*a, **kw)
+
     def __getattr__(self, name):
         if not self.actor:
             raise AttributeError(name)
         return getattr(self.actor, name)
 
-    def register(self):
-        self.actor = register_actor(**self.kw)(self.fn)
+    def register(self, broker):
+        self.actor = register_actor(broker=broker, **self.kw)(self.fn)
 
     # Next is regular actor API.
 
@@ -140,10 +146,10 @@ class LazyActor(object):
 @click.option('-Q', '--queues', type=str, default=None,
               metavar='QUEUES', show_default=True,
               help="listen to a subset of queues, comma separated")
+@click.argument('broker_name', default='dramatiq')
 @with_appcontext
-def worker(processes, threads, queues):
-    """
-    Run dramatiq workers.
+def worker(processes, threads, queues, broker_name):
+    """Run dramatiq workers.
 
     Setup Dramatiq with broker and task modules from Flask app.
 
@@ -156,6 +162,9 @@ def worker(processes, threads, queues):
       # Listen only to the "foo" and "bar" queues.
       $ flask worker -Q foo,bar
 
+    \b
+      # Consuming from a specific broker
+      $ flask worker mybroker
     """
     # Plugin for flask.commands entrypoint.
     #
@@ -163,9 +172,16 @@ def worker(processes, threads, queues):
     # dramatiq.
 
     parser = dramatiq_argument_parser()
+
+    # Set worker broker globally.
+    needle = 'dramatiq-' + broker_name
+    set_broker(current_app.extensions[needle].broker)
+
     command = [
         "--processes", str(processes),
         "--threads", str(threads),
+        # This module does not have broker local. Thus dramatiq fallbacks to
+        # global broker.
         __name__,
     ]
     if queues:
