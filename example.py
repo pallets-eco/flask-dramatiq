@@ -149,6 +149,7 @@ if '__main__' == __name__:
         level=logging.INFO,
         format='%(levelname)1.1s: %(message)s',
     )
+    logger.setLevel(logging.DEBUG)
 
     try:
         exit(main())
