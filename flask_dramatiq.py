@@ -1,5 +1,6 @@
 from importlib import import_module
 from threading import local
+from warnings import warn
 
 import click
 from dramatiq import (
@@ -67,6 +68,13 @@ class Dramatiq:
             self.init_app(app)
 
     def init_app(self, app):
+        if self.app is not None:
+            warn(
+                "%s is used by more than one flask application. "
+                "Actor's context may be set incorrectly." % (self,),
+                stacklevel=2,
+            )
+        self.app = app
         app.extensions[self.name] = self
         app.config.setdefault(self.config_prefix, self.broker_cls)
         cls = app.config[self.config_prefix]
