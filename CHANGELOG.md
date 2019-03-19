@@ -9,7 +9,7 @@
 - Warn on duplicate `init_app` calls.
 
 
-## [0.2.0] - 2019 march 7
+## [0.2.0] - 2019 March 7
 
 First public implementation.
 
