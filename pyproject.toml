@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flask-dramatiq"
-version = "0.2.1"
+version = "0.3.0"
 description = "Adds Dramatiq support to your Flask application"
 authors = ["Étienne BERSAC"]
 license = "BSD-3-Clause"

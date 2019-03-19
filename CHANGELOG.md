@@ -1,6 +1,6 @@
 # Changelog
 
-## [master] - Unreleased
+## [0.3.0] - 2019 March 19
 
 - Use `-Q` short option rather than `-q` to match `dramatiq` CLI options.
 - Support multiple broker on the same Flask app with configuration key prefix.
