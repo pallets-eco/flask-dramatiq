@@ -6,6 +6,7 @@ authors = ["Étienne BERSAC"]
 license = "BSD-3-Clause"
 readme = "README.md"
 homepage = "https://pypi.org/project/flask-dramatiq"
+documentation = "https://pypi.org/project/flask-dramatiq#readme"
 
 [tool.poetry.dependencies]
 python = "^3.6"
