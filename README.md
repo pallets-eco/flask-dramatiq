@@ -56,39 +56,6 @@ A complete flask app is available in project source tree
 [example.py](https://gitlab.com/bersace/flask-dramatiq/blob/master/example.py).
 
 
-## // Multiple brokers //
-
-You may need multiple broker, e.g. by associating a broker with a blueprint.
-Flask-Dramatiq supports this. Give other broker a name and run a dedicated
-worker for it.
-
-``` python
-bluebroker = Dramatiq(name='bluebroker')
-
-# Configuration:
-
-BLUEBROKER_BROKER_URL = 'rabbitmq://…'
-```
-
-Now run it :
-
-``` console
-$ flask worker bluebroker
-```
-
-
-## // Using Dramatiq CLI //
-
-You can still use `dramatiq` CLI by declaring a file containing:
-
-``` python
-app = create_app()
-broker = dramatiq.broker
-```
-
-Now call `dramatiq` CLI with `some_module:broker` as usual.
-
-
 ## // Credit and Support //
 
 Feel free to open an issue or suggest a merge request on [Gitlab project
