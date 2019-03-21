@@ -22,6 +22,7 @@ pytest = "^4.3"
 requests = "^2.21"
 sphinx = "^1.8"
 Pallets-Sphinx-Themes = "^1.1"
+pytest-mock = "^1.10"
 
 [tool.poetry.plugins."flask.commands"]
 worker = "flask_dramatiq:worker"
