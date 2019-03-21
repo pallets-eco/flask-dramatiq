@@ -1,6 +1,6 @@
 import pytest
 
-def test_global_app(mocker):
+def test_global_app():
     from flask import Flask
     from flask_dramatiq import Dramatiq
     from dramatiq.brokers.stub import StubBroker
