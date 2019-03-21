@@ -2,6 +2,14 @@
  Changelog
 ===========
 
+Version 0.3.1
+=============
+
+Released 2019 march 21th.
+
+- Fix register actor after init_app.
+
+
 Version 0.3.0
 =============
 
