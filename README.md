@@ -11,6 +11,9 @@ Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) task queue in your
 - Enable [Flask Application factory](http://flask.pocoo.org/docs/dev/tutorial/factory/).
 - Handle multiple brokers with configurable prefix.
 
+Full documentation at
+[flask-dramatiq.readthedocs.io](https://flask-dramatiq.readthedocs.io).
+
 
 ## // Installation and Usage //
 
