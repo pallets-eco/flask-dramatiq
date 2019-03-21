@@ -2,8 +2,10 @@
  Changelog
 ===========
 
-Unreleased
-===========
+Version 0.3.2
+=============
+
+Released 2019 march 21th.
 
 - Fix using StubBroker.
 - Add unit test.
