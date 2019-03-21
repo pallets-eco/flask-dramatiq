@@ -61,7 +61,7 @@ class Dramatiq:
     def __init__(self, app=None, broker_cls=DEFAULT_BROKER, name='dramatiq',
                  config_prefix=None):
         self.actors = []
-        self.app = app
+        self.app = None
         self.broker_cls = broker_cls
         self.config_prefix = config_prefix or name.upper() + '_BROKER'
         self.name = name
@@ -84,7 +84,11 @@ class Dramatiq:
         cls = app.config[self.config_prefix]
         if isinstance(cls, str):
             cls = import_object(cls)
-        self.broker = cls(url=app.config.get(self.config_prefix + '_URL'))
+        kw = {}
+        url = app.config.get(self.config_prefix + '_URL')
+        if url:
+            kw['url'] = url
+        self.broker = cls(**kw)
         self.broker.add_middleware(AppContextMiddleware(app))
 
         for actor in self.actors:

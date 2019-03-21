@@ -17,6 +17,7 @@ tests:
   - poetry install
   - poetry run flake8 example.py flask_dramatiq.py tests/func/
   - poetry run ./example.py db upgrade
+  - poetry run pytest -x tests/unit/
   - poetry run pytest -x tests/func/
   cache:
     paths: [.cache/]
