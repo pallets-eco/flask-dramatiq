@@ -29,3 +29,12 @@ def test_importer():
 
     with pytest.raises(ImportError):
         import_object(__name__ + ':absent')
+
+
+def test_named_ext():
+    from flask import Flask
+    from flask_dramatiq import Dramatiq
+
+    my = Dramatiq(name='my')
+
+    assert 'my' in repr(my)
