@@ -61,7 +61,7 @@ class Dramatiq:
     def __init__(self, app=None, broker_cls=DEFAULT_BROKER, name='dramatiq',
                  config_prefix=None):
         self.actors = []
-        self.app = app
+        self.app = None
         self.broker_cls = broker_cls
         self.config_prefix = config_prefix or name.upper() + '_BROKER'
         self.name = name
