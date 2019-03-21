@@ -21,7 +21,10 @@ def import_object(path):
     # Implement setuptools entrypoint-like loading of object.
     modname, objname = path.split(':')
     mod = import_module(modname)
-    return getattr(mod, objname)
+    try:
+        return getattr(mod, objname)
+    except AttributeError:
+        raise ImportError("%s does not exists." % path)
 
 
 class AppContextMiddleware(Middleware):
