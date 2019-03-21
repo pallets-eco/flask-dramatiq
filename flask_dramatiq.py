@@ -99,7 +99,7 @@ class Dramatiq:
             lazy_actor = LazyActor(self, fn, kw)
             self.actors.append(lazy_actor)
             if self.app:
-                lazy_actor.register()
+                lazy_actor.register(self.broker)
             return lazy_actor
 
         if fn:
