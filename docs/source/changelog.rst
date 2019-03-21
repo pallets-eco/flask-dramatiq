@@ -2,6 +2,14 @@
  Changelog
 ===========
 
+Unreleased
+===========
+
+- Fix using StubBroker.
+- Add unit test.
+- Document with Sphinx and RTD.
+
+
 Version 0.3.1
 =============
 
