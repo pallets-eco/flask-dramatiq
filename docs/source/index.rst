@@ -19,6 +19,7 @@ Features
 - Enable `Flask Application factory
   <http://flask.pocoo.org/docs/dev/tutorial/factory/>`_.
 - Handle multiple brokers with configurable prefix.
+- Automatic code reload on change if ``DEBUG`` is set.
 
 
 Get started

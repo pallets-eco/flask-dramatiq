@@ -1,3 +1,5 @@
+import os.path
+import sys
 from importlib import import_module
 from threading import local
 from warnings import warn
@@ -10,11 +12,19 @@ from dramatiq import (
 )
 from dramatiq.cli import (
     CPUS,
+    HAS_WATCHDOG,
     main as dramatiq_worker,
     make_argument_parser as dramatiq_argument_parser,
 )
 from flask import current_app
 from flask.cli import with_appcontext
+
+
+def guess_code_directory(broker):
+    actor = next(iter(broker.actors.values()))
+    modname, *_ = actor.fn.__module__.partition('.')
+    mod = sys.modules[modname]
+    return os.path.dirname(mod.__file__)
 
 
 def import_object(path):
@@ -182,7 +192,8 @@ def worker(processes, threads, queues, broker_name):
 
     # Set worker broker globally.
     needle = 'dramatiq-' + broker_name
-    set_broker(current_app.extensions[needle].broker)
+    broker = current_app.extensions[needle].broker
+    set_broker(broker)
 
     command = [
         "--processes", str(processes),
@@ -191,6 +202,11 @@ def worker(processes, threads, queues, broker_name):
         # global broker.
         __name__,
     ]
+    if current_app.config['DEBUG']:
+        command.append("--verbose")
+        if HAS_WATCHDOG:
+            command += ["--watch", guess_code_directory(broker)]
+
     if queues:
         command += ["--queues"] + queues.split(",")
     args = parser.parse_args(command)
