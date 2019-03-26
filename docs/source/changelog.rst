@@ -2,6 +2,12 @@
  Changelog
 ===========
 
+Unreleased
+==========
+
+- Automatic watch actor source file changes when DEBUG is set.
+
+
 Version 0.3.2
 =============
 
