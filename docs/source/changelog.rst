@@ -6,6 +6,7 @@ Unreleased
 ==========
 
 - Automatic watch actor source file changes when DEBUG is set.
+- Allow to replace default middlewares.
 
 
 Version 0.3.2

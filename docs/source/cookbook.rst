@@ -4,19 +4,27 @@
 
 Here are some recipes for more usage of Flask-Dramatiq.
 
-Add middleware
-==============
+Setup middlewares
+=================
 
-The ``Dramatiq`` object expose the broker instance as ``broker`` attribute, once
-the app is initialized. Thus you can add middleware either after a
+The ``Dramatiq`` constructor accepts ``middleware`` argument to overwrite
+default middlewares. If you need to configure middleware from Flask
+configuration, you'd better instanciate and add middleware once app is loaded
+and configured. ``Dramatiq`` object exposes the broker instance as ``broker``
+attribute once app is initialized. Thus you can add middleware either after a
 ``Dramatiq(app)`` or ``dramatiq.init_app(app)`` call. Here is a sample.
 
 .. code:: python
 
+   dramatiq = Dramatiq(middleware=[...])
+
    def create_app():
        app = Flask(__name__)
        dramatiq.init_app(app)
-       dramatiq.broker.add_middleware(...)
+       dramatiq.broker.add_middleware(..., after=...)
+
+All middleware can access ``current_app`` thread local as app context is
+initialized before any middlewares.
 
 
 Multiple brokers

@@ -16,6 +16,7 @@ from dramatiq.cli import (
     main as dramatiq_worker,
     make_argument_parser as dramatiq_argument_parser,
 )
+from dramatiq.middleware import default_middleware
 from flask import current_app
 from flask.cli import with_appcontext
 
@@ -72,12 +73,15 @@ class Dramatiq:
     DEFAULT_BROKER = 'dramatiq.brokers.rabbitmq:RabbitmqBroker'
 
     def __init__(self, app=None, broker_cls=DEFAULT_BROKER, name='dramatiq',
-                 config_prefix=None):
+                 config_prefix=None, middleware=None):
         self.actors = []
         self.app = None
         self.broker_cls = broker_cls
         self.config_prefix = config_prefix or name.upper() + '_BROKER'
         self.name = name
+        if middleware is None:
+            middleware = [m() for m in default_middleware]
+        self.middleware = middleware
         if app:
             self.init_app(app)
 
@@ -101,8 +105,8 @@ class Dramatiq:
         url = app.config.get(self.config_prefix + '_URL')
         if url:
             kw['url'] = url
-        self.broker = cls(**kw)
-        self.broker.add_middleware(AppContextMiddleware(app))
+        middleware = [AppContextMiddleware(app)] + self.middleware
+        self.broker = cls(**kw, middleware=middleware)
 
         for actor in self.actors:
             actor.register(broker=self.broker)
