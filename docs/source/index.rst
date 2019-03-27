@@ -7,6 +7,12 @@
  Flask-Dramatiq
 ################
 
+(:doc:`cookbook`, :doc:`changelog`, `Source Code`_)
+
+.. _Source Code: https://gitlab.com/bersace/flask-dramatiq
+
+| |PyPI| |License| |CI|
+
 Welcome to Flask-Dramatiq's documentation. Flask-Dramatiq is a Flask_ extensions
 to bridge Dramatiq_ task queue in your web app.
 
@@ -79,6 +85,18 @@ Contents
 
    cookbook
    changelog
+   Source Code <https://gitlab.com/bersace/flask-dramatiq>
 
 .. _Dramatiq: https://dramatiq.io/
 .. _Flask: https://flask.pocoo.org/
+
+.. |CI| image:: https://circleci.com/gh/dalibo/ldap2pg.svg?style=shield
+   :target: https://circleci.com/gh/dalibo/ldap2pg
+   :alt: Continuous Integration report
+
+.. |PyPI| image:: https://img.shields.io/pypi/v/flask-dramatiq.svg
+   :target: https://pypi.python.org/pypi/flask-dramatiq
+   :alt: Version on PyPI
+
+.. |License| image:: https://img.shields.io/pypi/l/flask-dramatiq.svg
+   :alt: BSD-3-Clause
