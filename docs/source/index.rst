@@ -85,6 +85,7 @@ Contents
 
    cookbook
    changelog
+   Source Code <https://gitlab.com/bersace/flask-dramatiq>
 
 .. _Dramatiq: https://dramatiq.io/
 .. _Flask: https://flask.pocoo.org/
