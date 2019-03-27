@@ -2,8 +2,10 @@
  Changelog
 ===========
 
-Unreleased
-==========
+Version 0.4.0
+=============
+
+Released 2019 march 27th.
 
 - Automatic watch actor source file changes when DEBUG is set.
 - Allow to replace default middlewares.
