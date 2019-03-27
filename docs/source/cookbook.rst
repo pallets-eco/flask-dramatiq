@@ -64,6 +64,7 @@ command. Each ``Dramatiq`` object has a ``broker`` attribute pointing to
 Dramatiq's broker instance. Ensure this object is importable by Dramatiq CLI:
 
 .. code:: python
+
     app = create_app()
     broker = dramatiq.broker
 
