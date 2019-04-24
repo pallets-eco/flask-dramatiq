@@ -10,7 +10,7 @@ documentation = "https://flask-dramatiq.rtfd.io"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-dramatiq = {version = "^1.5",extras = ["watch"]}
+dramatiq = "^1.5"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
