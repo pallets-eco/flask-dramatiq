@@ -10,13 +10,13 @@ documentation = "https://flask-dramatiq.rtfd.io"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-dramatiq = {version = "^1.5",extras = ["watch"]}
+dramatiq = "^1.5"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
 flask-sqlalchemy = "^2.3"
 dramatiq = {version = "^1.5",extras = ["rabbitmq", "watch"]}
-psycopg2 = "^2.7"
+psycopg2-binary = "^2.7"
 flask-migrate = "^2.4"
 pytest = "^4.3"
 requests = "^2.21"
