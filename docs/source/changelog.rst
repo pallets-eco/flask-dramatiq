@@ -2,8 +2,8 @@
  Changelog
 ===========
 
-Unreleased
-==========
+Version 0.4.1
+=============
 
 - Don't require watch dependencies at runtime.
 
