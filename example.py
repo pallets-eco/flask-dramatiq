@@ -46,10 +46,12 @@ from flask.cli import FlaskGroup
 from flask_dramatiq import Dramatiq
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from periodiq import PeriodiqMiddleware, cron
 
 
 db = SQLAlchemy()
 dramatiq = Dramatiq()
+dramatiq.middleware.append(PeriodiqMiddleware())
 logger = logging.getLogger(__name__)
 example = Blueprint('example', 'example')
 otherbroker = Dramatiq(name='other')
@@ -101,6 +103,11 @@ def process_job(job_id):
     db.session.commit()
 
     logger.info("Done job #%s.", job_id)
+
+
+@dramatiq.actor(periodic=cron('* * * * *'))
+def heartbeat():
+    logger.info("Pulse.")
 
 
 @example.route("/job/<job_id>")
@@ -161,6 +168,7 @@ if '__main__' == __name__:
         format='%(levelname)1.1s: %(message)s',
     )
     logger.setLevel(logging.DEBUG)
+    logging.getLogger('periodiq').setLevel(logging.DEBUG)
 
     try:
         exit(main())

@@ -15,6 +15,7 @@ tests:
     XDG_CACHE_HOME: .cache/
   script:
   - poetry install
+  - poetry run pip install dramatiq[rabbitmq,watch]  # Workaround bug in poetry 0.X
   - poetry run flake8 example.py flask_dramatiq.py tests/func/
   - poetry run ./example.py db upgrade
   - poetry run pytest -x tests/unit/
