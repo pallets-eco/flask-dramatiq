@@ -26,6 +26,7 @@ pytest-mock = "^1.10"
 pytest-cov = "^2.6"
 
 [tool.poetry.plugins."flask.commands"]
+periodiq = "flask_dramatiq:periodiq"
 worker = "flask_dramatiq:worker"
 
 [build-system]

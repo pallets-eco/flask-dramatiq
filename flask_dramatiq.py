@@ -158,6 +158,36 @@ class LazyActor(object):
 
 
 @click.command()
+@click.argument('broker_name', default='dramatiq')
+@with_appcontext
+def periodiq(broker_name):
+    """Run periodiq scheduler.
+
+    Setup Dramatiq with broker and task modules from Flask app.
+    """
+    try:
+        import periodiq
+    except ImportError:
+        click.fail("Missing periodiq dependency.")
+
+    needle = 'dramatiq-' + broker_name
+    broker = current_app.extensions[needle].broker
+    set_broker(broker)
+
+    command = [
+        # This module does not have broker local. Thus dramatiq fallbacks to
+        # global broker.
+        __name__,
+    ]
+    if current_app.config['DEBUG']:
+        command.append("--verbose")
+
+    parser = periodiq.make_argument_parser()
+    args = parser.parse_args(command)
+    periodiq.main(args)
+
+
+@click.command()
 @click.option('-p', '--processes', default=CPUS,
               metavar='PROCESSES', show_default=True,
               help="the number of worker processes to run")
