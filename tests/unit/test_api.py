@@ -1,5 +1,6 @@
 import pytest
 
+
 def test_global_app():
     from flask import Flask
     from flask_dramatiq import Dramatiq
@@ -32,7 +33,6 @@ def test_importer():
 
 
 def test_named_ext():
-    from flask import Flask
     from flask_dramatiq import Dramatiq
 
     my = Dramatiq(name='my')
