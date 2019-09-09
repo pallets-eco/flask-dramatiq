@@ -70,3 +70,43 @@ Dramatiq's broker instance. Ensure this object is importable by Dramatiq CLI:
 
 
 Now call ``dramatiq`` CLI with ``some_module:broker`` as usual.
+
+
+Schedule tasks with periodiq
+============================
+
+Flask-Dramatiq integrates periodiq with Flask, if periodiq is installed. You
+need to add periodiq middleware before initializing extension.
+
+.. code:: pythnon
+
+   from flask_dramatiq import Dramatiq
+   from periodiq import PeriodiqMiddleware, cron
+
+   dramatiq = Dramatiq()
+   dramatiq.middleware.append(PeriodiqMiddleware())
+
+
+   @dramatiq.actor(periodic=cron('0 9 * * *')
+   def hello():
+       print("Hello!")
+
+
+Now, run periodiq scheduler process right from flask CLI:
+
+.. code:: console
+
+   $ flask periodiq
+   ...
+   I: Starting Periodiq, a simple scheduler for Dramatiq.
+   I: Registered periodic actors:
+   I: 
+   I:     m h dom mon dow          module:actor@queue
+   I:     ------------------------ ------------------
+   I:     0 9 * * *                app:hello@default 
+   I: 
+   I: Scheduling Actor(hello) at 2019-09-09T09:00:00+02:00.
+   ...
+
+
+That's it! Your Flask-Dramatiq workers will process scheduled messages.
