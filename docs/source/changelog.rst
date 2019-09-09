@@ -2,6 +2,14 @@
  Changelog
 ===========
 
+Version 0.5.0
+=============
+
+Released 2019 september 9th.
+
+- Integrate periodiq scheduler.
+
+
 Version 0.4.1
 =============
 
