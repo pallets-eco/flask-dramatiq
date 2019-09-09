@@ -72,48 +72,41 @@ Dramatiq's broker instance. Ensure this object is importable by Dramatiq CLI:
 Now call ``dramatiq`` CLI with ``some_module:broker`` as usual.
 
 
-Using a Periodiq Scheduler
-==========================
+Schedule tasks with periodiq
+============================
 
-Once you have a pub/sub in your application, you may want to have something
-publishing message on a timely manner, this is Scheduler. Dramatiq does not have
-a built-in scheduler. There is plenty of solution and on of those is `periodiq
-<https://gitlab.com/bersace/periodiq>`_ .
-
-Periodiq provides a new actor option called ``periodic`` (without ``q``)
-accepting a timer specification. The ``cron`` function instanciate a timer
-specification using the well-known crontab(5) format. Finally, Periodiq ships a
-light dedicated service idling until a message needs publishing.
-
-Flask-Dramatiq integrates Periodiq **if installed**. Like Flask-SQLAlchemy does
-with SQLAlchmy, Flask-Dramatiq imports periodiq common API in extension its own
-namespace. See the following example:
+Flask-Dramatiq integrates periodiq with Flask, if periodiq is installed. You
+need to add periodiq middleware before initializing extension.
 
 .. code:: python
 
    from flask_dramatiq import Dramatiq
+   from periodiq import PeriodiqMiddleware, cron
 
    dramatiq = Dramatiq()
-   dramatiq.add_middleware(dramatiq.PeriodiqMiddleware())
+   dramatiq.middleware.append(PeriodiqMiddleware())
 
 
-   @dramatiq.actor(periodiq=dramatiq.cron('@hourly'))
-   def my_hourly_chores():
-        pass
+   @dramatiq.actor(periodic=cron('0 9 * * *')
+   def hello():
+       print("Hello!")
 
 
-   ...
-
-   def create_app():
-       app = ...
-       dramatiq.init_app(app)
-       return app
-
-Finaly, run the scheduler with your Flask configured broker by running ``flask
-periodiq``.
+Now, run periodiq scheduler process right from flask CLI:
 
 .. code:: console
 
-   $ FLASK_APP=wsgi flask scheduler
+   $ flask periodiq
+   ...
+   I: Starting Periodiq, a simple scheduler for Dramatiq.
+   I: Registered periodic actors:
+   I: 
+   I:     m h dom mon dow          module:actor@queue
+   I:     ------------------------ ------------------
+   I:     0 9 * * *                app:hello@default 
+   I: 
+   I: Scheduling Actor(hello) at 2019-09-09T09:00:00+02:00.
+   ...
 
-That's it. See ``flask periodiq --help`` for more.
+
+That's it! Your Flask-Dramatiq workers will process scheduled messages.
