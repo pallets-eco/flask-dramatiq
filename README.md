@@ -10,6 +10,7 @@ Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) task queue in your
 - Add `worker` command to Flask CLI.
 - Enable [Flask Application factory](http://flask.pocoo.org/docs/dev/tutorial/factory/).
 - Handle multiple brokers with configurable prefix.
+- Integrates [periodiq](https://gitlab.com/bersace/periodiq). *Optionnal*.
 
 Full documentation at
 [flask-dramatiq.readthedocs.io](https://flask-dramatiq.readthedocs.io).
