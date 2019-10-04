@@ -72,6 +72,15 @@ class Dramatiq:
     # https://github.com/Bogdanp/dramatiq/blob/master/dramatiq/broker.py#L34-L44
     DEFAULT_BROKER = 'dramatiq.brokers.rabbitmq:RabbitmqBroker'
 
+    try:
+        raise ImportError()
+        from periodiq import cron, PeriodiqMiddleware
+    except ImportError:
+        def cron(*_):
+            pass
+
+        PeriodiqMiddleware = None
+
     def __init__(self, app=None, broker_cls=DEFAULT_BROKER, name='dramatiq',
                  config_prefix=None, middleware=None):
         self.actors = []
