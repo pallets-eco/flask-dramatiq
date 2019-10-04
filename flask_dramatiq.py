@@ -149,6 +149,12 @@ class LazyActor(object):
     def __call__(self, *a, **kw):
         return self.fn(*a, **kw)
 
+    def __repr__(self):
+        return '<%s %s.%s>' % (
+            self.__class__.__name__,
+            self.fn.__module__, self.fn.__name__,
+        )
+
     def __getattr__(self, name):
         if not self.actor:
             raise AttributeError(name)
