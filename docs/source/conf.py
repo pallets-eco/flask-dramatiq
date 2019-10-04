@@ -193,7 +193,27 @@ epub_exclude_files = ['search.html']
 
 # -- Extension configuration -------------------------------------------------
 
+# -- Options for autodoc extension -------------------------------------------
+
+autodoc_class_signature = 'separated'
+autodoc_mock_imports = [
+    'click',
+    'dramatiq',
+    'flask',
+]
+autodoc_default_options = {
+    # We use autodoc to reuse docstring, but not to determine what and how it
+    # is presented.
+    'no-members': True,
+}
+
+
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {}
+intersphinx_mapping = {
+    'dramatiq': ('https://dramatiq.io/', None),
+    'flask': ('https://flask.palletsprojects.com/en/2.0.x/', None),
+}
+
+intersphinx_timeout = 30  # seconds

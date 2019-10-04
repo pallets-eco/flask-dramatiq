@@ -84,6 +84,8 @@ Table of contents
    :maxdepth: 2
 
    cookbook
+   api
+   cli
    changelog
    Source Code <https://gitlab.com/bersace/flask-dramatiq>
 
