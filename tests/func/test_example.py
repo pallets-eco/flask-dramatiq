@@ -27,7 +27,9 @@ def httpd():
 
 
 def generic_worker(*args):
-    proc = Popen(["./example.py", "worker", "-p", "1", "-t", "1"] + list(args))
+    proc = Popen([
+        "./example.py", "worker", "-vv", "-p", "1", "-t", "1"] + list(args))
+    sleep(.5)
     try:
         yield proc
     finally:
