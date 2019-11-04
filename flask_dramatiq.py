@@ -220,6 +220,8 @@ def periodiq(verbose, broker_name):
 
 
 @click.command()
+@click.option('-v', '--verbose', default=0, count=True,
+              help="turn on verbose log output")
 @click.option('-p', '--processes', default=CPUS,
               metavar='PROCESSES', show_default=True,
               help="the number of worker processes to run")
@@ -231,7 +233,7 @@ def periodiq(verbose, broker_name):
               help="listen to a subset of queues, comma separated")
 @click.argument('broker_name', default='dramatiq')
 @with_appcontext
-def worker(processes, threads, queues, broker_name):
+def worker(verbose, processes, threads, queues, broker_name):
     """Run dramatiq workers.
 
     Setup Dramatiq with broker and task modules from Flask app.
@@ -269,13 +271,14 @@ def worker(processes, threads, queues, broker_name):
         __name__,
     ]
     if current_app.config['DEBUG']:
-        command.append("--verbose")
+        verbose = max(1, verbose)
         if HAS_WATCHDOG:
             command += ["--watch", guess_code_directory(broker)]
 
     queues = queues.split(",") if queues else []
     if queues:
         command += ["--queues"] + queues
+    command += verbose * ['-v']
     args = parser.parse_args(command)
 
     current_app.logger.info("Able to execute the following actors:")
