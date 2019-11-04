@@ -158,9 +158,11 @@ class LazyActor(object):
 
 
 @click.command()
+@click.option('-v', '--verbose', default=0, count=True,
+              help="turn on verbose log output")
 @click.argument('broker_name', default='dramatiq')
 @with_appcontext
-def periodiq(broker_name):
+def periodiq(verbose, broker_name):
     """Run periodiq scheduler.
 
     Setup Dramatiq with broker and task modules from Flask app.
@@ -179,9 +181,11 @@ def periodiq(broker_name):
         # global broker.
         __name__,
     ]
-    if current_app.config['DEBUG']:
-        command.append("--verbose")
 
+    if current_app.config['DEBUG']:
+        verbose = max(verbose, 1)
+
+    command += verbose * ['-v']
     parser = periodiq.make_argument_parser()
     args = parser.parse_args(command)
     periodiq.main(args)
