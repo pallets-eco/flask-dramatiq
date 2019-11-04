@@ -70,3 +70,50 @@ Dramatiq's broker instance. Ensure this object is importable by Dramatiq CLI:
 
 
 Now call ``dramatiq`` CLI with ``some_module:broker`` as usual.
+
+
+Using a Periodiq Scheduler
+==========================
+
+Once you have a pub/sub in your application, you may want to have something
+publishing message on a timely manner, this is Scheduler. Dramatiq does not have
+a built-in scheduler. There is plenty of solution and on of those is `periodiq
+<https://gitlab.com/bersace/periodiq>`_ .
+
+Periodiq provides a new actor option called ``periodic`` (without ``q``)
+accepting a timer specification. The ``cron`` function instanciate a timer
+specification using the well-known crontab(5) format. Finally, Periodiq ships a
+light dedicated service idling until a message needs publishing.
+
+Flask-Dramatiq integrates Periodiq **if installed**. Like Flask-SQLAlchemy does
+with SQLAlchmy, Flask-Dramatiq imports periodiq common API in extension its own
+namespace. See the following example:
+
+.. code:: python
+
+   from flask_dramatiq import Dramatiq
+
+   dramatiq = Dramatiq()
+   dramatiq.add_middleware(dramatiq.PeriodiqMiddleware())
+
+
+   @dramatiq.actor(periodiq=dramatiq.cron('@hourly'))
+   def my_hourly_chores():
+        pass
+
+
+   ...
+
+   def create_app():
+       app = ...
+       dramatiq.init_app(app)
+       return app
+
+Finaly, run the scheduler with your Flask configured broker by running ``flask
+periodiq``.
+
+.. code:: console
+
+   $ FLASK_APP=wsgi flask scheduler
+
+That's it. See ``flask periodiq --help`` for more.
