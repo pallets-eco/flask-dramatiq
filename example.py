@@ -165,7 +165,7 @@ def main(argv=sys.argv[1:]):
 if '__main__' == __name__:
     logging.basicConfig(
         level=logging.INFO,
-        format='%(levelname)1.1s: %(message)s',
+        format=f'%(levelname)1.1s [{sys.argv[1]}] %(message)s',
     )
     logger.setLevel(logging.DEBUG)
     logging.getLogger('periodiq').setLevel(logging.DEBUG)
