@@ -2,6 +2,13 @@
  Changelog
 ===========
 
+Unreleased
+==========
+
+- Integrate `Periodiq <https://gitlab.com/bersace/periodiq>`_.
+- Logs managed actors on worker startup.
+
+
 Version 0.4.1
 =============
 

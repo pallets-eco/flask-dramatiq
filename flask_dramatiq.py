@@ -137,6 +137,10 @@ class Dramatiq:
         return decorator
 
 
+def format_actor(actor):
+    return "%s@%s" % (actor.actor_name, actor.queue_name)
+
+
 class LazyActor(object):
     # Intermediate object that register actor on broker an call.
 
@@ -148,6 +152,12 @@ class LazyActor(object):
 
     def __call__(self, *a, **kw):
         return self.fn(*a, **kw)
+
+    def __repr__(self):
+        return '<%s %s.%s>' % (
+            self.__class__.__name__,
+            self.fn.__module__, self.fn.__name__,
+        )
 
     def __getattr__(self, name):
         if not self.actor:
@@ -164,6 +174,15 @@ class LazyActor(object):
 
     def send_with_options(self, *a, **kw):
         return self.actor.send_with_options(*a, **kw)
+
+
+def list_managed_actors(broker, queues):
+    queues = set(queues)
+    all_actors = broker.actors.values()
+    if not queues:
+        return all_actors
+    else:
+        return [a for a in all_actors if a.queue_name in queues]
 
 
 @click.command()
@@ -254,7 +273,13 @@ def worker(processes, threads, queues, broker_name):
         if HAS_WATCHDOG:
             command += ["--watch", guess_code_directory(broker)]
 
+    queues = queues.split(",") if queues else []
     if queues:
-        command += ["--queues"] + queues.split(",")
+        command += ["--queues"] + queues
     args = parser.parse_args(command)
+
+    current_app.logger.info("Able to execute the following actors:")
+    for actor in list_managed_actors(broker, queues):
+        current_app.logger.info("    %s.", format_actor(actor))
+
     dramatiq_worker(args)
