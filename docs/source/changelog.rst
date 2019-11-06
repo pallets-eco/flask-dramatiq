@@ -2,8 +2,10 @@
  Changelog
 ===========
 
-Unreleased
-==========
+Version 0.6.0
+=============
+
+Released 2019 novembre the 6th.
 
 - Integrate `Periodiq <https://gitlab.com/bersace/periodiq>`_.
 - Logs managed actors on worker startup.
