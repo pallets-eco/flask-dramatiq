@@ -8,5 +8,7 @@ services:
 
   postgres:
     image: postgres:11-alpine
+    environment:
+      POSTGRES_PASSWORD: tondeuse
     labels:
       com.dnsdock.alias: postgres.flask-dramatiq.docker
