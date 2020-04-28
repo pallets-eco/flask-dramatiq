@@ -12,6 +12,9 @@ tests:
     BROKER_URL: amqp://rabbitmq
     PGHOST: postgres
     PGUSER: postgres
+    PGPASSWORD: tondeuse
+    # For postgres container
+    POSTGRES_PASSWORD: tondeuse
     XDG_CACHE_HOME: .cache/
   script:
   - poetry install
