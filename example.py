@@ -36,9 +36,6 @@ import os
 import pdb
 import sys
 import time
-from warnings import filterwarnings
-
-filterwarnings("ignore", message="The psycopg2 wheel package will be renamed")  # noqa
 
 import click
 from flask import Blueprint, Flask, jsonify, request
