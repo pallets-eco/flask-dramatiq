@@ -62,8 +62,8 @@ object replaces the ``dramatiq`` module.
 Flask-Dramatiq adds two configuration keys:
 
 - ``DRAMATIQ_BROKER``, points to broker class like
-  ``dramatiq.brokers.rabbitmq.RabbitmqBroker`` or
-  ``dramatiq.brokers.redis.RedisBroker``.
+  ``dramatiq.brokers.rabbitmq:RabbitmqBroker`` or
+  ``dramatiq.brokers.redis:RedisBroker``.
 - ``DRAMATIQ_BROKER_URL`` is passed as ``url`` keyword argument to Dramatiq
   broker class.
 
