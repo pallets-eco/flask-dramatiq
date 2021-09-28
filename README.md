@@ -46,8 +46,8 @@ def myhandler():
 Flask-Dramatiq adds two configuration keys:
 
 - `DRAMATIQ_BROKER`, points to broker class like
-  `dramatiq.brokers.rabbitmq.RabbitmqBroker` or
-  `dramatiq.brokers.redis.RedisBroker`.
+  `dramatiq.brokers.rabbitmq:RabbitmqBroker` or
+  `dramatiq.brokers.redis:RedisBroker`.
 - `DRAMATIQ_BROKER_URL` is passed as `url` keyword argument to broker class.
 
 Now run worker program to consume messages and execute tasks in the background:
