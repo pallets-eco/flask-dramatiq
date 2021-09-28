@@ -90,8 +90,8 @@ Contents
 .. _Dramatiq: https://dramatiq.io/
 .. _Flask: https://flask.pocoo.org/
 
-.. |CI| image:: https://circleci.com/gh/dalibo/ldap2pg.svg?style=shield
-   :target: https://circleci.com/gh/dalibo/ldap2pg
+.. |CI| image:: https://gitlab.com/bersace/flask-dramatiq/badges/master/pipeline.svg
+   :target: https://gitlab.com/bersace/flask-dramatiq/-/pipelines
    :alt: Continuous Integration report
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/flask-dramatiq.svg
