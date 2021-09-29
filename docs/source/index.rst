@@ -77,8 +77,8 @@ That's it! A complete flask app is available in project source tree `example.py
 <https://gitlab.com/bersace/flask-dramatiq/blob/master/example.py>`_
 
 
-Contents
-========
+Table of contents
+=================
 
 .. toctree::
    :maxdepth: 2
