@@ -2,14 +2,14 @@ from subprocess import Popen, check_output
 from time import sleep
 
 import pytest
-import requests
+import httpx
 
 
 def http_wait(url):
     for _ in range(32):
         try:
-            return requests.get(url)
-        except requests.exceptions.ConnectionError:
+            return httpx.get(url)
+        except httpx.ConnectError:
             sleep(.1)
     else:
         raise Exception("Failed to start example.py on time.")
@@ -58,13 +58,13 @@ def test_help():
 def test_fast(httpd, worker):
     http_wait("http://localhost:5000/job")
 
-    res = requests.post("http://localhost:5000/job/fast")
+    res = httpx.post("http://localhost:5000/job/fast")
     res = res.json()
     url = f"http://localhost:5000/job/{res['id']}"
 
     for _ in range(10):
         sleep(.2)
-        res = requests.get(url)
+        res = httpx.get(url)
         if 'done' == res.json()['status']:
             break
     else:
@@ -72,13 +72,13 @@ def test_fast(httpd, worker):
 
 
 def test_other(httpd, other_worker):
-    res = requests.post("http://localhost:5000/job/fast?broker=other")
+    res = httpx.post("http://localhost:5000/job/fast?broker=other")
     res = res.json()
     url = f"http://localhost:5000/job/{res['id']}"
 
     for _ in range(10):
         sleep(.2)
-        res = requests.get(url)
+        res = httpx.get(url)
         if 'done' == res.json()['status']:
             break
     else:
