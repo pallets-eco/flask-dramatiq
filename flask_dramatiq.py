@@ -1,3 +1,33 @@
+"""
+
+.. autoclass:: Dramatiq()
+
+
+Periodiq helpers
+================
+
+Periodiq is a simple scheduler for Dramatiq. Theses attributes are exposed
+in extension namespace as a graceful helper to access periodiq API.
+
+.. attribute:: Dramatiq.cron
+.. attribute:: Dramatiq.PeriodiqMiddleware
+
+Exemple:
+
+::
+
+   from flask_dramatiq import Dramatiq
+
+   dramatiq = Dramatiq(middleware=[PeriodiqMiddleware()])
+
+   @dramatiq.actor(periodic=dramatiq.cron('0 * * * *'))
+   def hourly():
+       ...
+
+
+See `periodiq project <https://gitlab.com/bersace/periodiq>`_ for details.
+
+"""
 import os.path
 import sys
 from importlib import import_module
@@ -17,7 +47,7 @@ from dramatiq.cli import (
     make_argument_parser as dramatiq_argument_parser,
 )
 from dramatiq.middleware import default_middleware
-from flask import current_app
+from flask import current_app, Flask
 from flask.cli import with_appcontext
 
 
@@ -66,7 +96,18 @@ class AppContextMiddleware(Middleware):
 
 
 class Dramatiq:
-    # The Flask extension.
+    """Flask extension bridging Dramatiq broker and Flask app.
+
+    Dramatiq API is eager. Broker initialisation precede actor declaration.
+    This breaks application factory pattern and other way to initialize
+    configuration after import.
+
+    This class enables lazy initialization of Dramatiq. Actual Dramatiq broker
+    is instanciated only once Flask app is created.
+
+    .. automethod:: actor
+    .. automethod:: init_app
+    """
 
     # Reuse same defaults as dramatiq. cf.
     # https://github.com/Bogdanp/dramatiq/blob/master/dramatiq/broker.py#L34-L44
@@ -83,6 +124,26 @@ class Dramatiq:
 
     def __init__(self, app=None, broker_cls=DEFAULT_BROKER, name='dramatiq',
                  config_prefix=None, middleware=None):
+        """
+        :app: Flask application if created. See :meth:`init_app`.
+
+        :param broker_cls: Default Dramatiq broker class. Overridable by
+            Flask configuration.
+
+        :param name: Unique identifier for multi-broker app.
+
+        :param config_prefix: Flask configuration option prefix for this
+            broker. By default, it is derived from ``name`` parameter,
+            capitalized.
+
+        :param middleware: List of Dramatiq middleware instances to override
+             Dramatiq defaults.
+
+        Flask-Dramatiq always prepend a custom middleware to the middleware
+        stack that setup Flask context. This way, every middleware can use
+        Flask app context.
+
+        """
         self.actors = []
         self.app = None
         self.broker_cls = broker_cls
@@ -97,7 +158,13 @@ class Dramatiq:
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.name)
 
-    def init_app(self, app):
+    def init_app(self, app: Flask):
+        """Initialize extension for one Flask application
+
+        This method triggers Dramatiq broker instanciation and effective actor
+        registration.
+
+        """
         if self.app is not None:
             warn(
                 "%s is used by more than one flask application. "
@@ -121,6 +188,14 @@ class Dramatiq:
             actor.register(broker=self.broker)
 
     def actor(self, fn=None, **kw):
+        """Register a callable as Dramatiq actor.
+
+        This decorator lazily register a callable as a Dramatiq actor. The
+        actor can't be called before :meth:`init_app` is called.
+
+        :param kw: Keywords argument passed to :func:`dramatiq.actor`.
+
+        """
         # Substitude dramatiq.actor decorator to return a lazy wrapper. This
         # allow to register actors in extension before the broker is
         # effectively configured by init_app.

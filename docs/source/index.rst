@@ -77,21 +77,23 @@ That's it! A complete flask app is available in project source tree `example.py
 <https://gitlab.com/bersace/flask-dramatiq/blob/master/example.py>`_
 
 
-Contents
-========
+Table of contents
+=================
 
 .. toctree::
    :maxdepth: 2
 
    cookbook
+   api
+   cli
    changelog
    Source Code <https://gitlab.com/bersace/flask-dramatiq>
 
 .. _Dramatiq: https://dramatiq.io/
 .. _Flask: https://flask.pocoo.org/
 
-.. |CI| image:: https://circleci.com/gh/dalibo/ldap2pg.svg?style=shield
-   :target: https://circleci.com/gh/dalibo/ldap2pg
+.. |CI| image:: https://gitlab.com/bersace/flask-dramatiq/badges/master/pipeline.svg
+   :target: https://gitlab.com/bersace/flask-dramatiq/-/pipelines
    :alt: Continuous Integration report
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/flask-dramatiq.svg
