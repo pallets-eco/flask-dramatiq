@@ -56,6 +56,27 @@ Now run a dedicated worker process for this broker:
    $ flask worker bluebroker
 
 
+Customize Broker Creation
+=========================
+
+To customize broker instanciation, you may just point the ``DRAMATIQ_BROKER``
+parameter to any callable factory. Dramatiq-pg call this parameter with
+``middleware`` parameter and ``url`` if ``DRAMATIQ_BROKER_URL``. The callable
+must return a Dramatiq broker instance.
+
+
+.. code:: python
+
+   def broker_factory(middleware, url=None):
+       # Instanciate your broker here.
+       broker = ...
+       return broker
+
+   ...
+
+   DRAMATIQ_BROKER = 'myapp:broker_factory'
+
+
 Using Dramatiq CLI
 ==================
 
