@@ -160,9 +160,10 @@ def main(argv=sys.argv[1:]):
 
 
 if '__main__' == __name__:
+    command = sys.argv[1] if sys.argv[1:] else 'flask'
     logging.basicConfig(
         level=logging.INFO,
-        format=f'%(levelname)1.1s [{sys.argv[1]}] %(message)s',
+        format=f'%(levelname)1.1s [{command}] %(message)s',
     )
     logger.setLevel(logging.DEBUG)
     logging.getLogger('periodiq').setLevel(logging.DEBUG)
