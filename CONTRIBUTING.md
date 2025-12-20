@@ -22,8 +22,8 @@ mock, no stub).
 $ poetry run pytest -x tests/func/
 ```
 
-Submit patch through [GitLab merge request on
-Flask-Dramatiq](https://gitlab.com/bersace/flask-dramatiq/merge_requests/new).
+Submit patch through [GitHub pull request on
+Flask-Dramatiq](https://github.com/pallets-eco/flask-dramatiq/pulls/new).
 
 
 ## Release Process
@@ -34,7 +34,7 @@ Just use poetry on `master`:
 $ poetry version minor
 $ poetry publish --build
 $ git commit -a -m "Version X.Y"
-$ git push git@gitlab.com:bersace/flask-dramatiq.git
+$ git push git@github.com:pallets-eco/flask-dramatiq.git
 ```
 
 You require access to [Flask-Dramatiq on

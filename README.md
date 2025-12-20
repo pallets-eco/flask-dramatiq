@@ -1,9 +1,9 @@
-![Flask-Dramatiq](https://gitlab.com/bersace/flask-dramatiq/raw/master/docs/logo-horizontal.png?inline=false)
+![Flask-Dramatiq](https://github.com/pallets-eco/flask-dramatiq/blob/master/docs/logo-horizontal.png?raw=true)
 
 Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) task queue in your
 [Flask](https://flask.pocoo.org) web application.
 
-## // Features // 
+## // Features //
 
 - Configure Dramatiq from Flask configuration.
 - Ensure Flask app is available to Dramatiq actor.
@@ -57,13 +57,13 @@ $ flask worker --processes=1
 ```
 
 A complete flask app is available in project source tree
-[example.py](https://gitlab.com/bersace/flask-dramatiq/blob/master/example.py).
+[example.py](https://github.com/pallets-eco/flask-dramatiq/blob/master/example.py).
 
 
 ## // Credit and Support //
 
 Feel free to open an issue or suggest a merge request on [Gitlab project
-page](https://gitlab.com/bersace/flask-dramatiq). Contribution welcome!
+page](https://github.com/pallets-eco/flask-dramatiq). Contribution welcome!
 
 The project is based on
 [Bogdanp/flask_dramatiq_example](https://github.com/Bogdanp/flask_dramatiq_example).
