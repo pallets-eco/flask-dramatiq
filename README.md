@@ -22,7 +22,7 @@ Flask-Dramatiq is licensed under BSD-3-Clause. Add `flask-dramatiq` to your
 project:
 
 ``` console
-$ poetry add flask-dramatiq
+$ uv add flask-dramatiq
 ```
 
 Then use `Dramatiq` object as a regular Flask extension:
