@@ -4,14 +4,14 @@ Thanks for you attention to Flask-Dramatiq. Here are some hints on contributing
 code to the project. Every contribution is welcome, not only code.
 
 
-## Development with poetry
+## Development with uv
 
-Flask-Dramatiq uses [poetry](https://poetry.eustace.io/) to manage the project,
-the virtualenv and more. Once poetry is installed, it's pretty straightforward.
+Flask-Dramatiq uses [uv](https://docs.astral.sh/uv/) to manage the project and
+the virtualenv. Once uv is installed, it's pretty straightforward.
 
 ``` console
-$ poetry install
-$ poetry run ./example.py --help
+$ uv sync --group dev
+$ uv run ./example.py --help
 ```
 
 A `docker-compose.yml` describes RabbitMQ and Postgres service to test with the
@@ -19,7 +19,7 @@ A `docker-compose.yml` describes RabbitMQ and Postgres service to test with the
 mock, no stub).
 
 ``` console
-$ poetry run pytest -x tests/func/
+$ uv run pytest -x tests/func/
 ```
 
 Submit patch through [GitHub pull request on
@@ -28,11 +28,11 @@ Flask-Dramatiq](https://github.com/pallets-eco/flask-dramatiq/pulls/new).
 
 ## Release Process
 
-Just use poetry on `master`:
+Bump version in `pyproject.toml`, then on `master`:
 
 ``` console
-$ poetry version minor
-$ poetry publish --build
+$ uv build
+$ uv publish
 $ git commit -a -m "Version X.Y"
 $ git push git@github.com:pallets-eco/flask-dramatiq.git
 ```

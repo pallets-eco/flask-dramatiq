@@ -8,7 +8,7 @@
 #
 # Install dev dependencies:
 #
-#     poetry install
+#     uv sync --all-groups --all-extras
 #
 # Start RabbitMQ and Postgres:
 #

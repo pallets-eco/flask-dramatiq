@@ -36,7 +36,7 @@ your project:
 
 .. code:: console
 
-    $ poetry add flask-dramatiq
+    $ uv add flask-dramatiq
 
 
 Then use ``Dramatiq`` object as a regular Flask extension. The ``Dramatiq``

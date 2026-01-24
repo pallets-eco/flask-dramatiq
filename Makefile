@@ -2,8 +2,8 @@ test:
 	pytest -x tests/func/
 
 
-PUBLISH_REMOTE=git@gitlab.com:bersace/flask-dramatiq.git
+PUBLISH_REMOTE=git@github.com:pallets-eco/flask-dramatiq.git
 publish:
-	poetry build
-	poetry publish
+	uv build
+	uv publish
 	git push --follow-tags $(PUBLISH_REMOTE)
