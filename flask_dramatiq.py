@@ -28,6 +28,7 @@ Exemple:
 See `periodiq project <https://gitlab.com/bersace/periodiq>`_ for details.
 
 """
+import multiprocessing
 import os.path
 import sys
 from importlib import import_module
@@ -330,6 +331,12 @@ def worker(verbose, processes, threads, queues, broker_name):
     #
     # Wraps dramatiq worker CLI in a Flask command. This is private API of
     # dramatiq.
+
+    # Python 3.14 changed multiprocessing default start method from 'fork'
+    # to 'forkserver' on POSIX. Dramatiq 1.x is incompatible with
+    # forkserver. Force 'fork' to restore pre-3.14 behavior.
+    if sys.platform != 'win32':
+        multiprocessing.set_start_method('fork', force=True)
 
     parser = dramatiq_argument_parser()
 
