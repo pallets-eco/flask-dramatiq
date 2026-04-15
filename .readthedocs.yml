@@ -1,0 +1,15 @@
+---
+version: 2
+sphinx:
+  configuration: docs/source/conf.py
+build:
+  os: "ubuntu-24.04"
+  tools:
+    python: "3.13"
+  jobs:
+    post_create_environment:
+      - pip install uv
+      - uv export --only-group doc --no-hashes --output-file requirements.txt
+    post_install:
+      - pip install .
+      - pip install --requirement requirements.txt

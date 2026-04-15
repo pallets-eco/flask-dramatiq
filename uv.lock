@@ -409,6 +409,7 @@ version = "0.6.0"
 source = { editable = "." }
 dependencies = [
     { name = "dramatiq" },
+    { name = "flask" },
 ]
 
 [package.dev-dependencies]
@@ -418,20 +419,25 @@ dev = [
     { name = "flask-migrate" },
     { name = "flask-sqlalchemy" },
     { name = "httpx" },
-    { name = "pallets-sphinx-themes" },
     { name = "periodiq" },
     { name = "psycopg2-binary" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-mock" },
     { name = "setuptools" },
+]
+doc = [
+    { name = "pallets-sphinx-themes" },
     { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
     { name = "sphinx", version = "9.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "dramatiq", specifier = ">=1.5,<2" }]
+requires-dist = [
+    { name = "dramatiq", specifier = ">=1.5,<2" },
+    { name = "flask", specifier = ">=2" },
+]
 
 [package.metadata.requires-dev]
 dev = [
@@ -440,13 +446,15 @@ dev = [
     { name = "flask-migrate", specifier = ">=4" },
     { name = "flask-sqlalchemy", specifier = ">=3" },
     { name = "httpx", specifier = ">=0.19.0,<1" },
-    { name = "pallets-sphinx-themes", specifier = ">=1.1,<3" },
     { name = "periodiq", specifier = ">=0.11.0,<1" },
     { name = "psycopg2-binary", specifier = ">=2.7,<3" },
     { name = "pytest", specifier = ">=7" },
     { name = "pytest-cov", specifier = ">=3" },
     { name = "pytest-mock", specifier = ">=3" },
     { name = "setuptools" },
+]
+doc = [
+    { name = "pallets-sphinx-themes", specifier = ">=1.1,<3" },
     { name = "sphinx", specifier = ">=4" },
 ]
 
