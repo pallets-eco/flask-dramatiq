@@ -333,9 +333,9 @@ def worker(verbose, processes, threads, queues, broker_name):
     # dramatiq.
 
     # Python 3.14 changed multiprocessing default start method from 'fork'
-    # to 'forkserver' on POSIX. Dramatiq 1.x is incompatible with
-    # forkserver. Force 'fork' to restore pre-3.14 behavior.
-    if sys.platform != 'win32':
+    # to 'forkserver' on POSIX. flask-dramatiq sets the broker globally
+    # then forks workers, which requires 'fork' to inherit broker state.
+    if sys.platform != 'win32' and sys.version_info >= (3, 14):
         multiprocessing.set_start_method('fork', force=True)
 
     parser = dramatiq_argument_parser()
