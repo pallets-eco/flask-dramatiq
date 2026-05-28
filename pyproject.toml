@@ -1,6 +1,6 @@
 [project]
 name = "flask-dramatiq"
-version = "0.7.0"
+version = "0.8.0"
 description = "Adds Dramatiq support to your Flask application"
 authors = [{ name = "Étienne BERSAC" }]
 license = { text = "BSD-3-Clause" }

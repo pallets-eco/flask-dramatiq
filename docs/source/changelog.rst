@@ -5,6 +5,8 @@
 Version 0.8.0
 =============
 
+Released 2026 may the 28th.
+
 - Support for dramatiq 2
 - Add tox configuration
 
