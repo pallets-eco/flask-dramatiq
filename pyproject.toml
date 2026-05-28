@@ -6,7 +6,7 @@ authors = [{ name = "Étienne BERSAC" }]
 license = { text = "BSD-3-Clause" }
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["dramatiq>=1.5,<2", "flask>=2"]
+dependencies = ["dramatiq>=1.5,<3", "flask>=2"]
 
 [project.urls]
 Homepage = "https://pypi.org/project/flask-dramatiq"
@@ -19,16 +19,20 @@ worker = "flask_dramatiq:worker"
 [dependency-groups]
 dev = [
     "flake8>=5",
-    "flask-sqlalchemy>=3",
-    "dramatiq[rabbitmq,watch]>=1.5,<2",
-    "psycopg2-binary>=2.7,<3",
+    "flask-sqlalchemy>=3.1",
+    "dramatiq[rabbitmq,watch]>=1.5,<3",
+    "psycopg2-binary>=2.9.5,<3",
     "flask-migrate>=4",
     "pytest>=7",
     "pytest-mock>=3",
     "pytest-cov>=3",
     "periodiq>=0.11.0,<1",
     "httpx>=0.19.0,<1",
-    "setuptools",
+    "setuptools>=59",
+    "watchdog>=2.3",
+    "watchdog-gevent>=0.2",
+    "tox>=4.22",
+    "tox-uv>=1.20",
 ]
 doc = [
     "sphinx>=4",
@@ -38,3 +42,36 @@ doc = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.tox]
+requires = ["tox>=4.22", "tox-uv>=1.20"]
+env_list = ["3.10", "3.11", "3.12", "3.13", "3.14", "dramatiq1", "minversions", "lint", "docs"]
+
+[tool.tox.env_run_base]
+runner = "uv-venv-lock-runner"
+dependency_groups = ["dev"]
+commands = [["pytest", "-x", "tests/unit/"]]
+
+[tool.tox.env.dramatiq1]
+description = "test against dramatiq 1.x"
+runner = "uv-venv-runner"
+base_python = ["3.13"]
+constrain_package_deps = true
+deps = ["dramatiq<2"]
+
+[tool.tox.env.minversions]
+description = "test against the lowest versions of direct dependencies"
+runner = "uv-venv-runner"
+base_python = ["3.10"]
+uv_resolution = "lowest-direct"
+
+[tool.tox.env.lint]
+description = "run flake8"
+base_python = ["3.13"]
+commands = [["flake8", "example.py", "flask_dramatiq.py", "tests/func/"]]
+
+[tool.tox.env.docs]
+description = "build sphinx documentation"
+base_python = ["3.13"]
+dependency_groups = ["doc"]
+commands = [["sphinx-build", "-M", "html", "docs/source", "docs/build", "-Wvn"]]

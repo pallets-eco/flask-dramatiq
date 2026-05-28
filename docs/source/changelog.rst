@@ -2,6 +2,12 @@
  Changelog
 ===========
 
+Version 0.8.0
+=============
+
+- Support for dramatiq 2
+- Add tox configuration
+
 Version 0.7.0
 =============
 
