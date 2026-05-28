@@ -28,14 +28,25 @@ Flask-Dramatiq](https://github.com/pallets-eco/flask-dramatiq/pulls/new).
 
 ## Release Process
 
-Bump version in `pyproject.toml`, then on `main`:
+Releases are published automatically by the [`Publish` GitHub Actions
+workflow](.github/workflows/publish.yml) when a `vX.Y.Z` tag is pushed. The
+workflow builds the distributions with `uv`, uploads them to PyPI using
+[trusted publishing](https://docs.pypi.org/trusted-publishers/), and creates a
+GitHub Release with the generated artifacts.
 
-``` console
-$ uv build
-$ uv publish
-$ git commit -a -m "Version X.Y"
-$ git push git@github.com:pallets-eco/flask-dramatiq.git
-```
+To cut a new release:
 
-You require access to [Flask-Dramatiq on
-PyPI](https://pypi.org/project/flask-dramatiq/). Remember to update Changelog.
+1. Bump the version in `pyproject.toml` and update the changelog.
+2. Commit and push to `main`:
+
+   ``` console
+   $ git commit -a -m "Version X.Y.Z"
+   $ git push origin main
+   ```
+
+3. Create and push the matching tag:
+
+   ``` console
+   $ git tag vX.Y.Z
+   $ git push origin vX.Y.Z
+   ```

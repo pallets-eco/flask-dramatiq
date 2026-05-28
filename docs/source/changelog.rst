@@ -2,6 +2,14 @@
  Changelog
 ===========
 
+Version 0.7.0
+=============
+
+Released 2026 may the 28th.
+
+- Migration of the repository to the GitHub pallets-eco organization.
+- Support for Python 3.10 to 3.14
+
 Version 0.6.0
 =============
 
