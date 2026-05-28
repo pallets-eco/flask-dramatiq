@@ -28,6 +28,7 @@ Exemple:
 See `periodiq project <https://gitlab.com/bersace/periodiq>`_ for details.
 
 """
+
 import multiprocessing
 import os.path
 import sys
@@ -36,37 +37,34 @@ from threading import local
 from warnings import warn
 
 import click
-from dramatiq import (
-    Middleware,
-    actor as register_actor,
-    set_broker,
-)
-from dramatiq.cli import (
-    CPUS,
-    HAS_WATCHDOG,
-    main as dramatiq_worker,
-    make_argument_parser as dramatiq_argument_parser,
-)
+from dramatiq import actor as register_actor
+from dramatiq import Middleware
+from dramatiq import set_broker
+from dramatiq.cli import CPUS
+from dramatiq.cli import HAS_WATCHDOG
+from dramatiq.cli import main as dramatiq_worker
+from dramatiq.cli import make_argument_parser as dramatiq_argument_parser
 from dramatiq.middleware import default_middleware
-from flask import current_app, Flask
+from flask import current_app
+from flask import Flask
 from flask.cli import with_appcontext
 
 
 def guess_code_directory(broker):
     actor = next(iter(broker.actors.values()))
-    modname, *_ = actor.fn.__module__.partition('.')
+    modname, *_ = actor.fn.__module__.partition(".")
     mod = sys.modules[modname]
     return os.path.dirname(mod.__file__)
 
 
 def import_object(path):
     # Implement setuptools entrypoint-like loading of object.
-    modname, objname = path.split(':')
+    modname, objname = path.split(":")
     mod = import_module(modname)
     try:
         return getattr(mod, objname)
-    except AttributeError:
-        raise ImportError("%s does not exists." % path)
+    except AttributeError as err:
+        raise ImportError(f"{path} does not exists.") from err
 
 
 class AppContextMiddleware(Middleware):
@@ -84,8 +82,7 @@ class AppContextMiddleware(Middleware):
 
         self.state.context = context
 
-    def after_process_message(
-            self, broker, message, *, result=None, exception=None):
+    def after_process_message(self, broker, message, *, result=None, exception=None):
         try:
             context = self.state.context
             context.pop(exception)
@@ -112,19 +109,27 @@ class Dramatiq:
 
     # Reuse same defaults as dramatiq. cf.
     # https://github.com/Bogdanp/dramatiq/blob/main/dramatiq/broker.py#L34-L44
-    DEFAULT_BROKER = 'dramatiq.brokers.rabbitmq:RabbitmqBroker'
+    DEFAULT_BROKER = "dramatiq.brokers.rabbitmq:RabbitmqBroker"
 
     try:
         raise ImportError()
-        from periodiq import cron, PeriodiqMiddleware
+        from periodiq import cron
+        from periodiq import PeriodiqMiddleware
     except ImportError:
+
         def cron(*_):
             pass
 
         PeriodiqMiddleware = None
 
-    def __init__(self, app=None, broker_cls=DEFAULT_BROKER, name='dramatiq',
-                 config_prefix=None, middleware=None):
+    def __init__(
+        self,
+        app=None,
+        broker_cls=DEFAULT_BROKER,
+        name="dramatiq",
+        config_prefix=None,
+        middleware=None,
+    ):
         """
         :app: Flask application if created. See :meth:`init_app`.
 
@@ -148,7 +153,7 @@ class Dramatiq:
         self.actors = []
         self.app = None
         self.broker_cls = broker_cls
-        self.config_prefix = config_prefix or name.upper() + '_BROKER'
+        self.config_prefix = config_prefix or name.upper() + "_BROKER"
         self.name = name
         if middleware is None:
             middleware = [m() for m in default_middleware]
@@ -157,7 +162,7 @@ class Dramatiq:
             self.init_app(app)
 
     def __repr__(self):
-        return '<%s %s>' % (self.__class__.__name__, self.name)
+        return f"<{self.__class__.__name__} {self.name}>"
 
     def init_app(self, app: Flask):
         """Initialize extension for one Flask application
@@ -168,20 +173,20 @@ class Dramatiq:
         """
         if self.app is not None:
             warn(
-                "%s is used by more than one flask application. "
-                "Actor's context may be set incorrectly." % (self,),
+                f"{self} is used by more than one flask application. "
+                "Actor's context may be set incorrectly.",
                 stacklevel=2,
             )
         self.app = app
-        app.extensions['dramatiq-' + self.name] = self
+        app.extensions["dramatiq-" + self.name] = self
         app.config.setdefault(self.config_prefix, self.broker_cls)
         cls = app.config[self.config_prefix]
         if isinstance(cls, str):
             cls = import_object(cls)
         kw = {}
-        url = app.config.get(self.config_prefix + '_URL')
+        url = app.config.get(self.config_prefix + "_URL")
         if url:
-            kw['url'] = url
+            kw["url"] = url
         middleware = [AppContextMiddleware(app)] + self.middleware
         self.broker = cls(**kw, middleware=middleware)
 
@@ -214,10 +219,10 @@ class Dramatiq:
 
 
 def format_actor(actor):
-    return "%s@%s" % (actor.actor_name, actor.queue_name)
+    return f"{actor.actor_name}@{actor.queue_name}"
 
 
-class LazyActor(object):
+class LazyActor:
     # Intermediate object that register actor on broker an call.
 
     def __init__(self, extension, fn, kw):
@@ -230,10 +235,7 @@ class LazyActor(object):
         return self.fn(*a, **kw)
 
     def __repr__(self):
-        return '<%s %s.%s>' % (
-            self.__class__.__name__,
-            self.fn.__module__, self.fn.__name__,
-        )
+        return f"<{self.__class__.__name__} {self.fn.__module__}.{self.fn.__name__}>"
 
     def __getattr__(self, name):
         if not self.actor:
@@ -262,9 +264,10 @@ def list_managed_actors(broker, queues):
 
 
 @click.command()
-@click.option('-v', '--verbose', default=0, count=True,
-              help="turn on verbose log output")
-@click.argument('broker_name', default='dramatiq')
+@click.option(
+    "-v", "--verbose", default=0, count=True, help="turn on verbose log output"
+)
+@click.argument("broker_name", default="dramatiq")
 @with_appcontext
 def periodiq(verbose, broker_name):
     """Run periodiq scheduler.
@@ -276,7 +279,7 @@ def periodiq(verbose, broker_name):
     except ImportError:
         click.fail("Missing periodiq dependency.")
 
-    needle = 'dramatiq-' + broker_name
+    needle = "dramatiq-" + broker_name
     broker = current_app.extensions[needle].broker
     set_broker(broker)
 
@@ -286,28 +289,45 @@ def periodiq(verbose, broker_name):
         __name__,
     ]
 
-    if current_app.config['DEBUG']:
+    if current_app.config["DEBUG"]:
         verbose = max(verbose, 1)
 
-    command += verbose * ['-v']
+    command += verbose * ["-v"]
     parser = periodiq.make_argument_parser()
     args = parser.parse_args(command)
     periodiq.main(args)
 
 
 @click.command()
-@click.option('-v', '--verbose', default=0, count=True,
-              help="turn on verbose log output")
-@click.option('-p', '--processes', default=CPUS,
-              metavar='PROCESSES', show_default=True,
-              help="the number of worker processes to run")
-@click.option('-t', '--threads', default=8,
-              metavar='THREADS', show_default=True,
-              help="the number of worker treads per processes")
-@click.option('-Q', '--queues', type=str, default=None,
-              metavar='QUEUES', show_default=True,
-              help="listen to a subset of queues, comma separated")
-@click.argument('broker_name', default='dramatiq')
+@click.option(
+    "-v", "--verbose", default=0, count=True, help="turn on verbose log output"
+)
+@click.option(
+    "-p",
+    "--processes",
+    default=CPUS,
+    metavar="PROCESSES",
+    show_default=True,
+    help="the number of worker processes to run",
+)
+@click.option(
+    "-t",
+    "--threads",
+    default=8,
+    metavar="THREADS",
+    show_default=True,
+    help="the number of worker treads per processes",
+)
+@click.option(
+    "-Q",
+    "--queues",
+    type=str,
+    default=None,
+    metavar="QUEUES",
+    show_default=True,
+    help="listen to a subset of queues, comma separated",
+)
+@click.argument("broker_name", default="dramatiq")
 @with_appcontext
 def worker(verbose, processes, threads, queues, broker_name):
     """Run dramatiq workers.
@@ -335,24 +355,26 @@ def worker(verbose, processes, threads, queues, broker_name):
     # Python 3.14 changed multiprocessing default start method from 'fork'
     # to 'forkserver' on POSIX. flask-dramatiq sets the broker globally
     # then forks workers, which requires 'fork' to inherit broker state.
-    if sys.platform != 'win32' and sys.version_info >= (3, 14):
-        multiprocessing.set_start_method('fork', force=True)
+    if sys.platform != "win32" and sys.version_info >= (3, 14):
+        multiprocessing.set_start_method("fork", force=True)
 
     parser = dramatiq_argument_parser()
 
     # Set worker broker globally.
-    needle = 'dramatiq-' + broker_name
+    needle = "dramatiq-" + broker_name
     broker = current_app.extensions[needle].broker
     set_broker(broker)
 
     command = [
-        "--processes", str(processes),
-        "--threads", str(threads),
+        "--processes",
+        str(processes),
+        "--threads",
+        str(threads),
         # This module does not have broker local. Thus dramatiq fallbacks to
         # global broker.
         __name__,
     ]
-    if current_app.config['DEBUG']:
+    if current_app.config["DEBUG"]:
         verbose = max(1, verbose)
         if HAS_WATCHDOG:
             command += ["--watch", guess_code_directory(broker)]
@@ -360,7 +382,7 @@ def worker(verbose, processes, threads, queues, broker_name):
     queues = queues.split(",") if queues else []
     if queues:
         command += ["--queues"] + queues
-    command += verbose * ['-v']
+    command += verbose * ["-v"]
     args = parser.parse_args(command)
 
     current_app.logger.info("Able to execute the following actors:")
