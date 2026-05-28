@@ -121,11 +121,11 @@ Now, run periodiq scheduler process right from flask CLI:
    ...
    I: Starting Periodiq, a simple scheduler for Dramatiq.
    I: Registered periodic actors:
-   I: 
+   I:
    I:     m h dom mon dow          module:actor@queue
    I:     ------------------------ ------------------
-   I:     0 9 * * *                app:hello@default 
-   I: 
+   I:     0 9 * * *                app:hello@default
+   I:
    I: Scheduling Actor(hello) at 2019-09-09T09:00:00+02:00.
    ...
 

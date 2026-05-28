@@ -38,20 +38,23 @@ import sys
 import time
 
 import click
-from flask import Blueprint, Flask, jsonify, request
+from flask import Blueprint
+from flask import Flask
+from flask import jsonify
+from flask import request
 from flask.cli import FlaskGroup
 from flask_dramatiq import Dramatiq
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from periodiq import PeriodiqMiddleware, cron
-
+from periodiq import cron
+from periodiq import PeriodiqMiddleware
 
 db = SQLAlchemy()
 dramatiq = Dramatiq()
 dramatiq.middleware.append(PeriodiqMiddleware())
 logger = logging.getLogger(__name__)
-example = Blueprint('example', 'example')
-otherbroker = Dramatiq(name='other')
+example = Blueprint("example", "example")
+otherbroker = Dramatiq(name="other")
 
 
 class Job(db.Model):
@@ -73,7 +76,7 @@ class Job(db.Model):
         if self.type == Job.TYPE_SLOW:
             time.sleep(30)
         elif self.type == Job.TYPE_FAST:
-            time.sleep(.1)
+            time.sleep(0.1)
         else:
             raise ValueError("Unknown job type.")
 
@@ -85,7 +88,7 @@ class Job(db.Model):
         )
 
 
-@otherbroker.actor(queue_name='otherq')
+@otherbroker.actor(queue_name="otherq")
 def other_job(job_id):
     process_job(job_id)
 
@@ -102,7 +105,7 @@ def process_job(job_id):
     logger.info("Done job #%s.", job_id)
 
 
-@dramatiq.actor(periodic=cron('* * * * *'))
+@dramatiq.actor(periodic=cron("* * * * *"))
 def heartbeat():
     logger.info("Pulse.")
 
@@ -121,8 +124,8 @@ def job_post(type_):
     db.session.add(job)
     db.session.commit()
 
-    broker = request.args.get('broker', 'default')
-    if 'other' == broker:
+    broker = request.args.get("broker", "default")
+    if "other" == broker:
         other_job.send(job.id)
     else:
         process_job.send(job.id)
@@ -141,7 +144,7 @@ def create_app():
 
     # Beware that app config must be loaded before you initialize Dramatiq
     # extension with app.
-    app.config.from_pyfile('config.py', silent=True)
+    app.config.from_pyfile("config.py", silent=True)
 
     db.init_app(app)
     Migrate(app, db)
@@ -159,21 +162,21 @@ def main(argv=sys.argv[1:]):
     pass
 
 
-if '__main__' == __name__:
-    command = sys.argv[1] if sys.argv[1:] else 'flask'
+if "__main__" == __name__:
+    command = sys.argv[1] if sys.argv[1:] else "flask"
     logging.basicConfig(
         level=logging.INFO,
-        format=f'%(levelname)1.1s [{command}] %(message)s',
+        format=f"%(levelname)1.1s [{command}] %(message)s",
     )
     logger.setLevel(logging.DEBUG)
-    logging.getLogger('periodiq').setLevel(logging.DEBUG)
+    logging.getLogger("periodiq").setLevel(logging.DEBUG)
 
     try:
         exit(main())
     except (pdb.bdb.BdbQuit, KeyboardInterrupt):
         logger.info("Interrupted.")
     except Exception:
-        logger.exception('Unhandled error:')
+        logger.exception("Unhandled error:")
         if sys.stdout.isatty():
             logger.debug("Dropping in debugger.")
             pdb.post_mortem(sys.exc_info()[2])
