@@ -9,7 +9,7 @@
 
 (:doc:`cookbook`, :doc:`changelog`, `Source Code`_)
 
-.. _Source Code: https://gitlab.com/bersace/flask-dramatiq
+.. _Source Code: https://github.com/pallets-eco/flask-dramatiq
 
 | |PyPI| |License| |CI|
 
@@ -74,7 +74,7 @@ Now run worker command to consume messages and execute tasks in the background:
    $ flask worker --processes=1
 
 That's it! A complete flask app is available in project source tree `example.py
-<https://gitlab.com/bersace/flask-dramatiq/blob/master/example.py>`_
+<https://github.com/pallets-eco/flask-dramatiq/blob/main/example.py>`_
 
 
 Table of contents
@@ -87,13 +87,13 @@ Table of contents
    api
    cli
    changelog
-   Source Code <https://gitlab.com/bersace/flask-dramatiq>
+   Source Code <https://github.com/pallets-eco/flask-dramatiq>
 
 .. _Dramatiq: https://dramatiq.io/
 .. _Flask: https://flask.pocoo.org/
 
-.. |CI| image:: https://gitlab.com/bersace/flask-dramatiq/badges/master/pipeline.svg
-   :target: https://gitlab.com/bersace/flask-dramatiq/-/pipelines
+.. |CI| image:: https://github.com/pallets-eco/flask-dramatiq/actions/workflows/ci.yml/badge.svg
+   :target: https://github.com/pallets-eco/flask-dramatiq/actions/workflows/ci.yml
    :alt: Continuous Integration report
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/flask-dramatiq.svg

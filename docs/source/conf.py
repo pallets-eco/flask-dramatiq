@@ -109,11 +109,11 @@ html_sidebars = {
 html_logo = '_static/logo.jpeg'
 
 html_context = {"project_links": [
-    Link("PyPI releases", "https://pypi.org/project/Flask-Dramatiq/"),
-    Link("Source Code", "https://gitlab.com/bersace/flask-dramatiq/"),
-    Link("Issue Tracker", "https://gitlab.com/bersace/flask-dramatiq/issues/"),
-    Link("Flask Website", "https://palletsprojects.com/p/flask/"),
-    Link("Dramatiq Website", "https://dramatiq.io/"),
+    Link("PyPI releases", "https://pypi.org/project/Flask-Dramatiq"),
+    Link("Source Code", "https://github.com/pallets-eco/flask-dramatiq"),
+    Link("Issue Tracker", "https://github.com/pallets-eco/flask-dramatiq/issues"),
+    Link("Flask Website", "https://palletsprojects.com/p/flask"),
+    Link("Dramatiq Website", "https://dramatiq.io"),
 ]}
 
 # -- Options for HTMLHelp output ---------------------------------------------

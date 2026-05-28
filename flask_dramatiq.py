@@ -111,7 +111,7 @@ class Dramatiq:
     """
 
     # Reuse same defaults as dramatiq. cf.
-    # https://github.com/Bogdanp/dramatiq/blob/master/dramatiq/broker.py#L34-L44
+    # https://github.com/Bogdanp/dramatiq/blob/main/dramatiq/broker.py#L34-L44
     DEFAULT_BROKER = 'dramatiq.brokers.rabbitmq:RabbitmqBroker'
 
     try:
