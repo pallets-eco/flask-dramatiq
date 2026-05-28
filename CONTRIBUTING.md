@@ -28,7 +28,7 @@ Flask-Dramatiq](https://github.com/pallets-eco/flask-dramatiq/pulls/new).
 
 ## Release Process
 
-Bump version in `pyproject.toml`, then on `master`:
+Bump version in `pyproject.toml`, then on `main`:
 
 ``` console
 $ uv build

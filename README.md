@@ -1,4 +1,4 @@
-![Flask-Dramatiq](https://github.com/pallets-eco/flask-dramatiq/blob/master/docs/logo-horizontal.png?raw=true)
+![Flask-Dramatiq](https://github.com/pallets-eco/flask-dramatiq/blob/main/docs/logo-horizontal.png?raw=true)
 
 Flask-Dramatiq plugs [Dramatiq](https://dramatiq.io) task queue in your
 [Flask](https://flask.pocoo.org) web application.
@@ -57,12 +57,12 @@ $ flask worker --processes=1
 ```
 
 A complete flask app is available in project source tree
-[example.py](https://github.com/pallets-eco/flask-dramatiq/blob/master/example.py).
+[example.py](https://github.com/pallets-eco/flask-dramatiq/blob/main/example.py).
 
 
 ## // Credit and Support //
 
-Feel free to open an issue or suggest a merge request on [Gitlab project
+Feel free to open an issue or suggest a merge request on [Github project
 page](https://github.com/pallets-eco/flask-dramatiq). Contribution welcome!
 
 The project is based on
